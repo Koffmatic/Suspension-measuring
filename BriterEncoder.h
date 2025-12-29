@@ -6,6 +6,7 @@ namespace BriterEncoder {
 
     constexpr uint8_t FIRST_ID = 3;
     constexpr uint8_t LAST_ID  = 6;
+    constexpr uint8_t NUM_ENCODERS  = (LAST_ID - FIRST_ID + 1);
 
     // Protocol function codes
     constexpr uint8_t FUNC_READ = 0x01;

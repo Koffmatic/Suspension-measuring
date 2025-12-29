@@ -1,75 +1,124 @@
-# Suspension Measuring (ESP32 + CAN)
+# Suspension Measuring System
 
-This project is an ESP32-based suspension measurement system using CAN-connected
-absolute encoders. The primary goal is to measure and log suspension movement
-during real riding conditions.
+Suspension measuring and logging system based on **ESP32 + CAN bus**, designed primarily for snowmobile suspension analysis.  
+Project focuses on **robust CAN communication, clean architecture, and extensible debugging/logging features**.
 
-The project is developed primarily for personal use, but with a structure that
-could support future extensions or broader use.
-
----
-
-## Features
-
-- CAN bus communication using the ESP32 TWAI driver
-- Support for Briter CAN absolute encoders
-- Multi-encoder polling
-- Encoder zeroing via CAN commands
-- Serial CLI for debugging and control
-- Modular code structure (CAN / Encoder / Measurements / CLI)
+This is a personal project, but structured with product-level maintainability in mind.
 
 ---
 
 ## Hardware
 
-- ESP32 development board  
-  - Primary development board: **LilyGO T-CAN485**
-    (https://github.com/Xinyuan-LilyGO/T-CAN485)
-- CAN transceiver (on-board on T-CAN485) (SN65HVD230)
-- Briter CAN absolute encoders
-- Custom mechanical mounting for suspension measurement
+### Main development board
+- **LilyGO T-CAN485**
+  - ESP32
+  - SN65HVD231 CAN transceiver  
+  - Board repository:  
+    https://github.com/Xinyuan-LilyGO/T-CAN485
+
+### Sensors
+- **Briter CAN absolute encoders**
+  - Used for suspension position measurement
+  - Encoder IDs start from **ID 3**
 
 ---
 
-## Project Status
+## Features (current)
 
-⚠️ **Work in progress**
-
-Current state:
-- Measurement reading: ✅ working
-- CAN-based zeroing: ✅ working
-- Serial debug output: ⚠️ partial
-- SD card logging: ⏳ planned
-- OTA updates: ⏳ planned
-- Multi-ESP32 communication: ⏳ planned
+- CAN bus communication using **ESP32 TWAI driver**
+- Periodic polling of multiple CAN encoders
+- Conversion of raw encoder values to physical suspension length
+- Serial CLI for diagnostics and control
+- Configurable debug system with runtime control
+- Modular C++ architecture (no Arduino `.ino` monolith)
 
 ---
 
-## Build Environment
+## Serial CLI
 
-- Arduino IDE
-- ESP32 Arduino core
-- Native ESP32 TWAI (CAN) driver
+Connect to the board via serial monitor (115200 baud).
+
+### Available commands
+
+help
+status    Show measured values
+zero <id>   Zero encoder (ID 3..6)
+zeroall   Zero all encoders
+debug   Show current debug level
+debug off|error|info|verbose
 
 ---
 
-## Development Board and Libraries
+## Debug System
 
-This project is developed and tested primarily on the **LilyGO T-CAN485** ESP32 board.
+The project uses a global debug system with multiple levels:
 
-Parts of the project structure and CAN initialization are based on examples and
-libraries provided by LilyGO for the T-CAN485 board:
+- `OFF`     – No debug output
+- `ERROR`   – Only critical errors
+- `INFO`    – Initialization and system status
+- `VERBOSE` – Detailed CAN and measurement diagnostics
 
-https://github.com/Xinyuan-LilyGO/T-CAN485
+Debug level can be changed at runtime via the serial CLI:
 
-The code has since been adapted and refactored to use the native ESP32 TWAI (CAN)
-driver and a modular project structure tailored for suspension measurement.
+All debug output is routed through `debug.h`, allowing easy future extension without modifying core logic.
+
+---
+
+## Project Structure
+
+SuspensionMeas/
+├── config.h
+├── SuspensionMeas.ino
+├── core/
+│ ├── can_bus.cpp / .h
+│ ├── BriterEncoder.cpp / .h
+│ ├── measurements.cpp / .h
+├── cli/
+│ └── serial_cli.cpp / .h
+├── debug/
+│ └── debug.cpp / .h
+├── show_values.cpp / .h
+
+
+The structure is intentionally modular to support future features without major refactoring.
+
+---
+
+## Planned Features
+
+- SD card logging
+- OTA firmware updates
+- Measurement buffering / history
+- Multi-device ESP32 communication
+- Optional wireless data transfer
+- **BRP snowmobile ECU CAN data sniffing and logging (if data access is possible)**
+
+These features are intentionally **not yet implemented**, to keep the current system stable and testable.
+
+---
+
+## Versioning
+
+- **v0.1**
+  - First stable version
+  - CAN communication working
+  - Measurements validated
+  - Serial CLI and debug system implemented
 
 ---
 
 ## Notes
 
-This repository currently follows Arduino IDE compatibility rules.
-A future migration to PlatformIO is planned once the feature set stabilizes.
+This project prioritizes:
+- clarity over cleverness
+- explicit error handling
+- separation of responsibilities
+- long-term maintainability
 
-Commits are expected to represent working states tested with real hardware.
+---
+
+## Contact
+
+For questions, ideas, or further project details, feel free to contact:
+
+**koffmatic@gmail.com**
