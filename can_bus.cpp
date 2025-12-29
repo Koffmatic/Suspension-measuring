@@ -1,5 +1,5 @@
 #include "can_bus.h"
-#include "../config.h"
+#include "config.h"
 #include "measurements.h"
 
 #include <Arduino.h>

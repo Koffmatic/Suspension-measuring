@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "../config.h"
+#include "config.h"
 
 #include "can_bus.h"
 #include "BriterEncoder.h"
