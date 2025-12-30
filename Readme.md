@@ -31,12 +31,20 @@ This is a personal project, but structured with product-level maintainability in
 - Serial CLI for diagnostics and control
 - Configurable debug system with runtime control
 - Modular C++ architecture (no Arduino `.ino` monolith)
+- SD card logging with binary record format
+- Ring-buffered SD writer task for reliable high-rate logging
+- Versioned binary log file format (forward compatible)
+- CAN sniffer mode (RX-only, no bus transmission)
+
 
 ---
 
 ## Serial CLI
 
 Connect to the board via serial monitor (115200 baud).
+The serial CLI is also used as a transport layer for SD card interaction,
+enabling file listing and binary data transfer without removing the SD card.
+
 
 ### Available commands
 
@@ -64,19 +72,73 @@ All debug output is routed through `debug.h`, allowing easy future extension wit
 
 ---
 
+## SD Card Logging
+
+The system supports **binary SD card logging** designed for high-rate CAN traffic and sensor data.
+
+### Key characteristics
+
+- FAT32 formatted SD cards (recommended: 8–32 GB)
+- Append-only binary log files (`LOG_XXXX.BIN`)
+- Fixed record structures with type identifiers
+- Microsecond-resolution timestamps
+- Ring buffer to decouple real-time acquisition from SD write latency
+- Writer task runs at low priority to avoid disturbing measurements
+
+The log file starts with a small header containing:
+- Magic identifier (`SDLG`)
+- Log format version
+
+This allows future format changes while maintaining backward compatibility.
+
+---
+
+## CAN Sniffer Mode
+
+In addition to normal operation, the system supports a **CAN sniffer mode**.
+
+In sniffer mode:
+- CAN transmission is fully disabled in software
+- The ESP32 operates as a passive RX-only listener
+- All received CAN frames can be logged directly to SD
+- No encoder polling or sensor processing is performed
+
+This mode is intended for:
+- Reverse engineering vehicle CAN traffic
+- ECU data exploration
+- Safe monitoring of unknown CAN buses
+
+Sniffer mode can be extended in the future with:
+- Runtime bitrate switching
+- CAN ID filtering
+- Selective logging
+
+---
+
 ## Project Structure
 
 SuspensionMeas/
+
 ├── config.h
+
 ├── SuspensionMeas.ino
+
 ├── core/
+
 │ ├── can_bus.cpp / .h
+
 │ ├── BriterEncoder.cpp / .h
+
 │ ├── measurements.cpp / .h
+
 ├── cli/
+
 │ └── serial_cli.cpp / .h
+
 ├── debug/
+
 │ └── debug.cpp / .h
+
 ├── show_values.cpp / .h
 
 
@@ -86,7 +148,7 @@ The structure is intentionally modular to support future features without major 
 
 ## Planned Features
 
-- SD card logging
+- Extended SD log tooling and analysis utilities
 - OTA firmware updates
 - Measurement buffering / history
 - Multi-device ESP32 communication
@@ -94,6 +156,26 @@ The structure is intentionally modular to support future features without major 
 - **BRP snowmobile ECU CAN data sniffing and logging (if data access is possible)**
 
 These features are intentionally **not yet implemented**, to keep the current system stable and testable.
+
+### Planned PC Tooling
+
+A lightweight **Python-based desktop application** is planned to simplify SD log access.
+
+Planned features:
+- Serial port selection
+- SD card directory listing via CLI commands
+- Selective download of log files over USB
+- No SD card removal required
+- Cross-platform (Windows / Linux)
+
+The application will be implemented using:
+- Python
+- pyserial
+- customtkinter for the graphical interface
+
+The goal is to provide a simple and robust workflow:
+ESP32 → USB → PC → offline analysis.
+
 
 ---
 
