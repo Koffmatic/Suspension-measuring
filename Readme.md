@@ -186,6 +186,12 @@ ESP32 → USB → PC → offline analysis.
   - CAN communication working
   - Measurements validated
   - Serial CLI and debug system implemented
+- **v0.2**
+  - added debugging functions
+  - other improvements
+- **v0.3**
+  - added SD logging functions
+  - other improvements
 
 ---
 
