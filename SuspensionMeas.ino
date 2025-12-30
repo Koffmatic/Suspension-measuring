@@ -18,7 +18,6 @@ void setup()
     initSerialCli();
     initCAN();
     initMeasurements();
-    initShowValues();
     // initOTA();
 }
 
