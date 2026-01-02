@@ -1,0 +1,3 @@
+getStatus()
+postEvent(event)
+getLiveData()

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suspension Logger</title>
+
+  <!-- Tailwind (dev only, korvataan myöhemmin buildillä) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- i18n -->
+  <script defer src="i18n.js"></script>
+  
+  <!-- App -->
+  <script defer src="app.js"></script>
+</head>
+
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+
+  <!-- Top navigation (Tailwind-style) -->
+  <div class="min-h-full">
+    <nav class="bg-gray-800/50">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+          <div class="flex items-center">
+              <div class="shrink-0">
+              <img src="assets/icons/koffpension_logo.svg" alt="Koffpension" class="h-8 w-8 object-contain" />
+            </div>
+            <div class="ml-3">
+              <div class="text-lg font-semibold text-white">Koffpension</div>
+            </div>
+
+            <div class="hidden md:block">
+              <div class="ml-10 flex items-baseline space-x-4">
+                <a href="#/home" data-route="home" aria-current="page" class="nav-link rounded-md bg-gray-950/50 px-3 py-2 text-sm font-medium text-white" data-i18n="nav.home">Home</a>
+                <a href="#/events" data-route="events" class="nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white" data-i18n="nav.events">Events</a>
+                <a href="#/logs" data-route="logs" class="nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white" data-i18n="nav.logs">Logs</a>
+                <a href="#/settings" data-route="settings" class="nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white" data-i18n="nav.settings">Settings</a>
+                <a href="#/info" data-route="info" class="nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white" data-i18n="nav.info">Info</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="hidden md:block">
+            <div class="ml-4 flex items-center md:ml-6">
+              <div class="text-sm text-gray-300 mr-4" data-i18n="app.status">Idle</div>
+              <div id="live-badge" class="text-sm text-gray-300"></div>
+              <button type="button" class="ml-4 relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
+                <span class="sr-only">View notifications</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="h-6 w-6">
+                  <path d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="-mr-2 flex md:hidden">
+            <!-- Mobile menu toggle (non-functional simple button) -->
+            <button id="mobile-menu-button" aria-expanded="false" type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
+              <span class="sr-only">Open main menu</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="h-6 w-6">
+                <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Mobile menu (hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-800/80">
+      <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+        <a href="#/home" data-route="home" class="mobile-link block rounded-md bg-gray-950/50 px-3 py-2 text-base font-medium text-white" data-i18n="nav.home">Home</a>
+        <a href="#/events" data-route="events" class="mobile-link block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white" data-i18n="nav.events">Events</a>
+        <a href="#/logs" data-route="logs" class="mobile-link block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white" data-i18n="nav.logs">Logs</a>
+        <a href="#/settings" data-route="settings" class="mobile-link block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white" data-i18n="nav.settings">Settings</a>
+        <a href="#/info" data-route="info" class="mobile-link block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white" data-i18n="nav.info">Info</a>
+      </div>
+    </div>
+
+    <!-- global header removed (pages render their own sub-headers) -->
+    <main>
+      <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+
+        <!-- Page: Home -->
+        <div id="page-home" class="page">
+          <div class="flex-1 p-4 space-y-4">
+            <h1 class="text-xl font-semibold" data-i18n="home.title">Overview</h1>
+
+            <div class="grid grid-cols-1 gap-4">
+              <section class="bg-gray-800 rounded-lg p-4">
+                <h2 class="text-lg font-medium mb-2" data-i18n="home.vehicle">Vehicle</h2>
+
+                <div id="vehicle-container" class="relative w-full aspect-[16/9] bg-gray-700 rounded overflow-hidden">
+                  <!-- sled image -->
+                  <img id="sled-image" src="assets/sled_bgr.png" alt="Sled" class="w-full h-full object-contain" />
+
+                  <!-- interactive overlay -->
+                  <div id="overlay" class="absolute inset-0">
+                    <div id="pointer-display" class="absolute right-3 top-3 text-sm text-gray-300 bg-black/40 px-2 py-1 rounded"></div>
+
+                    <!-- markers (positioned with inline styles) -->
+                    <div data-id="fl" data-i18n="marker.fl" class="marker absolute bg-black/70 px-2 py-1 rounded text-xs cursor-pointer" style="left:64%;top:42%;">FL<br><span class="sag text-xs text-gray-300"></span></div>
+                    <div data-id="fr" data-i18n="marker.fr" class="marker absolute bg-black/70 px-2 py-1 rounded text-xs cursor-pointer" style="left:66%;top:50%;">FR<br><span class="sag text-xs text-gray-300"></span></div>
+                    <div data-id="rl" data-i18n="marker.rl" class="marker absolute bg-black/70 px-2 py-1 rounded text-xs cursor-pointer" style="left:40%;top:62%;">ET<br><span class="sag text-xs text-gray-300"></span></div>
+                    <div data-id="rr" data-i18n="marker.rr" class="marker absolute bg-black/70 px-2 py-1 rounded text-xs cursor-pointer" style="left:32%;top:56%;">RR<br><span class="sag text-xs text-gray-300"></span></div>
+                  </div>
+                </div>
+                <!-- Current settings under the sled (populated from latest event) -->
+                <div id="current-settings-home" class="mt-3 bg-gray-800 rounded p-3 text-sm text-gray-300">
+                  <div class="font-medium mb-1" data-i18n="current.title">Current settings</div>
+                  <div id="current-settings-home-content">No data</div>
+                </div>
+              </section>
+
+              <section class="bg-gray-800 rounded-lg p-4">
+                <h2 class="text-lg font-medium mb-2" data-i18n="home.session">Session</h2>
+                <p class="text-sm text-gray-400" data-i18n="home.session_info">No active session</p>
+
+                <div class="mt-3 flex items-center space-x-4">
+                  <div class="text-sm text-gray-300">
+                    <span data-i18n="sag.current">SAG</span>: <span id="sag-display">--%</span>
+                  </div>
+                  <button id="btn-reset-sag" class="rounded-md bg-red-600 px-2 py-1 text-sm text-white hover:bg-red-700" data-i18n="sag.reset">Reset SAG</button>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page: Events -->
+        <div id="page-events" class="page hidden">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-medium mb-2" data-i18n="events.title">Events</h2>
+            <button id="btn-add-event" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700" data-i18n="events.add">Add event</button>
+          </div>
+
+          <div id="event-list" class="space-y-3 mt-4">
+            <!-- events will be rendered here -->
+            <p class="text-sm text-gray-400">No events yet.</p>
+          </div>
+
+          <!-- Current settings at top of Events page -->
+          <div id="current-settings-events" class="mt-4 bg-gray-800 rounded p-3 text-sm text-gray-300">
+            <div class="font-medium mb-1" data-i18n="current.title">Current settings</div>
+            <div id="current-settings-events-content">No data</div>
+          </div>
+        </div>
+
+        <!-- Page: Logs -->
+        <div id="page-logs" class="page hidden">
+          <h2 class="text-lg font-medium mb-2">Logs</h2>
+          <p class="text-sm text-gray-400">Log viewer will be here.</p>
+        </div>
+
+        <!-- Page: Settings -->
+        <div id="page-settings" class="page hidden">
+          <h2 class="text-lg font-medium mb-2" data-i18n="settings.title">Settings</h2>
+
+          <div class="bg-gray-800 rounded-lg p-4">
+            <form id="settings-form" class="space-y-4">
+              <p class="text-sm text-gray-300" data-i18n="settings.desc">Configure damper units and behavior for the test environment.</p>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <fieldset class="p-3 bg-gray-900 rounded">
+                  <legend class="font-medium mb-2" data-i18n="settings.front_label">Front shocks</legend>
+                  <label class="block text-sm text-gray-300"> <span data-i18n="settings.preload_unit">Preload unit</span>
+                    <select name="front_preload_unit" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1">
+                      <option value="mm">mm</option>
+                      <option value="turns">turns</option>
+                    </select>
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="settings.damping_unit">Damping unit</span>
+                    <select name="front_damping_unit" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1">
+                      <option value="clicks">clicks</option>
+                      <option value="turns">turns</option>
+                    </select>
+                  </label>
+                </fieldset>
+
+                <fieldset class="p-3 bg-gray-900 rounded">
+                  <legend class="font-medium mb-2" data-i18n="settings.rl_label">Etupukki</legend>
+                  <label class="block text-sm text-gray-300"> <span data-i18n="settings.preload_unit">Preload unit</span>
+                    <select name="rl_preload_unit" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1">
+                      <option value="mm">mm</option>
+                      <option value="turns">turns</option>
+                    </select>
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="settings.damping_unit">Damping unit</span>
+                    <select name="rl_damping_unit" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1">
+                      <option value="clicks">clicks</option>
+                      <option value="turns">turns</option>
+                    </select>
+                  </label>
+                </fieldset>
+
+                <fieldset class="p-3 bg-gray-900 rounded">
+                  <legend class="font-medium mb-2" data-i18n="settings.rr_label">Takapukki</legend>
+                  <label class="block text-sm text-gray-300"> <span data-i18n="settings.preload_unit">Preload unit</span>
+                    <select name="rr_preload_unit" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1">
+                      <option value="mm">mm</option>
+                      <option value="turns">turns</option>
+                    </select>
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="settings.damping_unit">Damping unit</span>
+                    <select name="rr_damping_unit" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1">
+                      <option value="clicks">clicks</option>
+                      <option value="turns">turns</option>
+                    </select>
+                  </label>
+                </fieldset>
+              </div>
+
+              <div class="flex justify-end space-x-2">
+                <button type="button" id="settings-reset" class="rounded-md px-3 py-2 bg-gray-700 text-sm">Reset</button>
+                <button type="submit" id="settings-save" class="rounded-md px-3 py-2 bg-indigo-600 text-sm text-white" data-i18n="settings.save">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Page: Info -->
+        <div id="page-info" class="page hidden">
+          <h2 class="text-lg font-medium mb-2" data-i18n="nav.info">Info</h2>
+          <p class="text-sm text-gray-400">About and firmware/device info.</p>
+        </div>
+
+        <!-- Add Event Modal -->
+        <div id="event-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
+          <div class="bg-gray-800 rounded-lg w-full max-w-2xl p-6 mx-auto">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-medium" data-i18n="event.modal.title">Add event</h3>
+              <button id="event-modal-close" class="text-gray-400 hover:text-white">✕</button>
+            </div>
+
+            <form id="event-form" class="space-y-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- FL -->
+                <fieldset class="p-3 bg-gray-900 rounded">
+                  <legend class="font-medium mb-2" data-i18n="marker.fl">FL</legend>
+                  <label class="block text-sm text-gray-300"> <span data-i18n="field.preload">Preload</span> <span id="fl-preload-current" class="text-gray-500"></span>
+                    <input name="fl_preload" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.comp_slow">Compression (slow)</span> <span id="fl-comp_slow-current" class="text-gray-500"></span>
+                    <input name="fl_comp_slow" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.comp_fast">Compression (fast)</span> <span id="fl-comp_fast-current" class="text-gray-500"></span>
+                    <input name="fl_comp_fast" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.rebound">Rebound</span> <span id="fl-rebound-current" class="text-gray-500"></span>
+                    <input name="fl_rebound" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                </fieldset>
+
+                <!-- FR -->
+                <fieldset class="p-3 bg-gray-900 rounded">
+                  <legend class="font-medium mb-2" data-i18n="marker.fr">FR</legend>
+                  <label class="block text-sm text-gray-300"> <span data-i18n="field.preload">Preload</span> <span id="fr-preload-current" class="text-gray-500"></span>
+                    <input name="fr_preload" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.comp_slow">Compression (slow)</span> <span id="fr-comp_slow-current" class="text-gray-500"></span>
+                    <input name="fr_comp_slow" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.comp_fast">Compression (fast)</span> <span id="fr-comp_fast-current" class="text-gray-500"></span>
+                    <input name="fr_comp_fast" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.rebound">Rebound</span> <span id="fr-rebound-current" class="text-gray-500"></span>
+                    <input name="fr_rebound" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                </fieldset>
+
+                <!-- RL (Etupukki) -->
+                <fieldset class="p-3 bg-gray-900 rounded">
+                  <legend class="font-medium mb-2" data-i18n="marker.rl">Etupukki</legend>
+                  <label class="block text-sm text-gray-300"> <span data-i18n="field.preload">Preload</span> <span id="rl-preload-current" class="text-gray-500"></span>
+                    <input name="rl_preload" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.comp_slow">Compression (slow)</span> <span id="rl-comp_slow-current" class="text-gray-500"></span>
+                    <input name="rl_comp_slow" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.comp_fast">Compression (fast)</span> <span id="rl-comp_fast-current" class="text-gray-500"></span>
+                    <input name="rl_comp_fast" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.rebound">Rebound</span> <span id="rl-rebound-current" class="text-gray-500"></span>
+                    <input name="rl_rebound" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                </fieldset>
+
+                <!-- RR (Takapukki) -->
+                <fieldset class="p-3 bg-gray-900 rounded">
+                  <legend class="font-medium mb-2" data-i18n="marker.rr">Takapukki</legend>
+                  <label class="block text-sm text-gray-300"> <span data-i18n="field.preload">Preload</span> <span id="rr-preload-current" class="text-gray-500"></span>
+                    <input name="rr_preload" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.comp_slow">Compression (slow)</span> <span id="rr-comp_slow-current" class="text-gray-500"></span>
+                    <input name="rr_comp_slow" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.comp_fast">Compression (fast)</span> <span id="rr-comp_fast-current" class="text-gray-500"></span>
+                    <input name="rr_comp_fast" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                  <label class="block text-sm text-gray-300 mt-2"> <span data-i18n="field.rebound">Rebound</span> <span id="rr-rebound-current" class="text-gray-500"></span>
+                    <input name="rr_rebound" type="number" step="0.1" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" />
+                  </label>
+                </fieldset>
+              </div>
+
+              <div>
+                <label class="block text-sm text-gray-300" data-i18n="field.notes">Notes</label>
+                <textarea name="notes" maxlength="160" class="mt-1 block w-full rounded bg-gray-700 px-2 py-1" rows="3"></textarea>
+                <div id="notes-count" class="text-xs text-gray-400 mt-1">0/160</div>
+              </div>
+
+              <div class="flex justify-end space-x-2">
+                <button type="button" id="event-cancel" class="rounded-md px-3 py-2 bg-gray-700 text-sm">Cancel</button>
+                <button type="submit" id="event-save" class="rounded-md px-3 py-2 bg-indigo-600 text-sm text-white">Save</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+</body>
+</html>

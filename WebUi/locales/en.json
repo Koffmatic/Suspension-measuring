@@ -1,0 +1,61 @@
+{
+  "app.title": "Suspension Measurement",
+
+  "nav.home": "Home",
+  "nav.events": "Events",
+  "nav.logs": "Logs",
+  "nav.settings": "Settings",
+  "nav.info": "About",
+
+  "home.title": "Overview",
+  "home.session": "Session",
+  "home.session.empty": "No active session",
+
+  "session.active": "Active session",
+  "session.testenv": "Test environment",
+  "home.vehicle": "Vehicle name here",
+
+  "marker.fl": "Front left",
+  "marker.fr": "Front right",
+  "marker.rl": "Front pivot",
+  "marker.rr": "Rear pivot",
+
+  "events.title": "Events",
+  "events.add": "Add event",
+
+  "event.modal.title": "Add event",
+  "event.modal.save": "Save",
+  "event.modal.cancel": "Cancel",
+
+  "field.preload": "Preload",
+  "field.comp_slow": "Compression (slow)",
+  "field.comp_fast": "Compression (fast)",
+  "field.rebound": "Rebound",
+  "field.notes": "Notes (max 160 chars)",
+
+  "settings.title": "Settings",
+  "settings.desc": "Configure damper units and behavior for the test environment.",
+  "settings.front_label": "Front shocks",
+  "settings.rl_label": "Front pivot (Etupukki)",
+  "settings.rr_label": "Rear pivot (Takapukki)",
+  "settings.preload_unit": "Preload unit",
+  "settings.damping_unit": "Damping unit",
+  "settings.save": "Save",
+  "settings.saved": "Settings saved",
+  
+  "sag.current": "SAG",
+  "sag.reset": "Reset SAG",
+  "current.title": "Current settings",
+  "events.set_initial": "Set initial settings",
+  "unit.clicks": "clicks",
+  "unit.turns": "turns",
+  "unit.mm": "mm",
+  "comments.title": "Comments",
+  "comments.post": "Post",
+
+  "common.ok": "OK",
+  "common.cancel": "Cancel",
+  "common.save": "Save",
+  "common.close": "Close",
+  "common.loading": "Loading…"
+}

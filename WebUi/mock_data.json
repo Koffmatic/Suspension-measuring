@@ -1,0 +1,46 @@
+{
+  "events": [],
+  "config": {
+    "initial": {
+      "springs": {
+        "fl": {
+          "preload": 5,
+          "comp_slow": 4,
+          "comp_fast": 3,
+          "rebound": 2
+        },
+        "fr": {
+          "preload": 5,
+          "comp_slow": 4,
+          "comp_fast": 3,
+          "rebound": 2
+        },
+        "rl": {
+          "preload": 3,
+          "comp_slow": 4,
+          "comp_fast": 5,
+          "rebound": 6
+        },
+        "rr": {
+          "preload": 4,
+          "comp_slow": 5,
+          "comp_fast": 3,
+          "rebound": 2
+        }
+      },
+      "notes": "Alkukonffi"
+    },
+    "front": {
+      "preload_unit": "mm",
+      "damping_unit": "clicks"
+    },
+    "rl": {
+      "preload_unit": "mm",
+      "damping_unit": "turns"
+    },
+    "rr": {
+      "preload_unit": "mm",
+      "damping_unit": "clicks"
+    }
+  }
+}

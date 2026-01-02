@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" aria-label="Koffpension logo">
+  <!-- White damper-only logo (no spring) -->
+  <rect width="96" height="96" fill="none" />
+  <g transform="translate(48 48) rotate(45)" fill="#ffffff">
+    <!-- left mounting eye -->
+    <circle cx="-28" cy="0" r="5" />
+    <!-- damper body -->
+    <rect x="-20" y="-8" width="40" height="16" rx="4" />
+    <!-- piston rod -->
+    <rect x="20" y="-3" width="30" height="6" rx="3" />
+    <!-- subtle detail: small notch on body -->
+    <rect x="-6" y="-9" width="12" height="2" rx="1" fill="#ffffff" opacity="0.15" />
+  </g>
+</svg>

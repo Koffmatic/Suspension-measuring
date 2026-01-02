@@ -1,0 +1,62 @@
+{
+  "app.title": "Jousituksen Mittaus",
+
+  "nav.home": "Koti",
+  "nav.events": "Tapahtumat",
+  "nav.logs": "Lokit",
+  "nav.settings": "Asetukset",
+  "nav.about": "Tietoja",
+  "nav.info": "Tietoja",
+  
+  "home.title": "Yleisnäkymä",
+  "home.session": "Istunto",
+  "home.session.empty": "Ei aktiivista sessiota",
+
+  "session.active": "Aktiivinen istunto",
+  "session.testenv": "testiympäristö",
+  
+  "home.vehicle": "Ajoneuvon nimi tähän",
+
+  "marker.fl": "Etu vasen",
+  "marker.fr": "Etu oikea",
+  "marker.rl": "Etupukki",
+  "marker.rr": "Takapukki",
+
+  "events.title": "Tapahtumat",
+  "events.add": "Lisää tapahtuma",
+
+  "event.modal.title": "Lisää tapahtuma",
+  "event.modal.save": "Tallenna",
+  "event.modal.cancel": "Peruuta",
+
+  "field.preload": "Esijännitys",
+  "field.comp_slow": "Puristusvaimennus (hidas)",
+  "field.comp_fast": "Puristusvaimennus (nopea)",
+  "field.rebound": "Paluuvaimennus",
+  "field.notes": "Muistiinpanot (max 160 merkkiä)",
+  "settings.title": "Asetukset",
+  "settings.desc": "Määritä iskunvaimentimien yksiköt ja käyttäytyminen testiympäristössä.",
+  "settings.front_label": "Etuiskarit",
+  "settings.rl_label": "Etupukki",
+  "settings.rr_label": "Takapukki",
+  "settings.preload_unit": "Esijännityksen yksikkö",
+  "settings.damping_unit": "Vaimennuksen yksikkö",
+  "settings.save": "Tallenna",
+  "settings.saved": "Asetukset tallennettu",
+  "sag.current": "SAG",
+  "sag.reset": "Nollaa SAG",
+  "current.title": "Nykyiset asetukset",
+  "events.set_initial": "Lisää alkuasetukset",
+  "unit.clicks": "napsua",
+  "unit.turns": "kierrosta",
+  "unit.mm": "mm",
+  "comments.title": "Kommentit",
+  "comments.post": "Lähetä",
+
+  "common.ok": "OK",
+  "common.cancel": "Peruuta",
+  "common.save": "Tallenna",
+  "common.close": "Sulje",
+  "common.loading": "Ladataan…"
+
+}
